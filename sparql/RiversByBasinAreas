@@ -1,0 +1,13 @@
+# Find all the rivers that flow into the Vltava river 
+# and all rivers that flow to them etc. 
+# ordered by their basin area.
+
+SELECT ?river ?riverLabel ?drainageBasinLabel
+WHERE
+{
+  # all rivers that flow into the Vltava River
+  ?river wdt:P403+ wd:Q131574.
+  ?river wdt:P4614 ?drainageBasin
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE]". }
+}
+ORDER BY ASC(?drainageBasinLabel)
