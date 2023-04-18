@@ -6,16 +6,22 @@
 SELECT 
   ?actor 
   ?actorLabel 
-  ?awardsNumber 
-  ?awards
+  ?awardsNumber  # total number of (any) awards 
+  ?awards        # list of all received awards
 WHERE 
 {
   {
-    SELECT ?actor (COUNT(DISTINCT ?award) AS ?awardsNumber) (GROUP_CONCAT(DISTINCT(?award); separator=", ") as ?awards)
+    SELECT 
+      ?actor 
+      (COUNT(DISTINCT ?award) AS ?awardsNumber)   
+      (GROUP_CONCAT(DISTINCT(?label); separator=", ") as ?awards)  
+      
     WHERE {
-       ?actor wdt:P106 wd:Q33999 . # has occupation actor
-       ?actor wdt:P166 wd:Q103916. # received Academy Award for Best Actor
-       ?actor wdt:P166 ?award.     # received any award
+      ?actor wdt:P106 wd:Q33999 . # has occupation actor
+      ?actor wdt:P166 wd:Q103916. # received Academy Award for Best Actor
+      ?actor wdt:P166 ?award.     # received any award
+      ?award rdfs:label ?label.   # label of the received award in English
+      FILTER (langMatches( lang(?label), "EN" ))
     }  
     GROUP BY ?actor
   }         
