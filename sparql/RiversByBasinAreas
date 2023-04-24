@@ -1,13 +1,17 @@
+# https://query.wikidata.org/
+
 # Find all the rivers that flow into the Vltava river 
 # and all rivers that flow to them etc. 
-# ordered by their basin area.
+# ordered by their basin area 
 
-SELECT ?river ?riverLabel ?watershedArea
+SELECT ?river ?riverLabel ?watershedArea_sqkm
 WHERE
 {
   ?river wdt:P31 wd:Q4022;
          wdt:P403/wdt:P403* wd:Q131574.
-  ?river wdt:P2053 ?watershedArea
+  ?river wdt:P2053 ?watershedArea_sqkm
   SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE]". }
 }
-ORDER BY DESC(?watershedArea)
+
+ORDER BY DESC(?watershedArea_sqkm)
+    
