@@ -1,0 +1,37 @@
+# https://query.wikidata.org
+
+# Figure skaters
+# who achieved a total score world record 
+# under the -5/+5 GoE rules (starting from the 2018-2019 season)
+# in ice dance or pair skating
+# ordered by sport label and date of the competition
+
+SELECT 
+  ?sportLabel 
+  ?date
+  ?competitionLabel 
+  ?womanSkaterLabel 
+  ?manSkaterLabel 
+  ?score 
+ 
+WHERE {
+  # competition under figure skating rules starting from the 2018-2019 season
+  ?competition wdt:P2283 wd:Q57614485 ;
+      wdt:P31 wd:Q16510064 ; 
+      p:P710 ?statement .
+  
+  # skaters who together achieved a total score world record in this competition
+  ?womanSkater wdt:P21 wd:Q6581072.   # woman figure skater 
+  ?statement ps:P710 ?womanSkater ;
+      pq:P1706 ?manSkater;           
+      pq:P1351 ?score ;
+      pq:P31 wd:Q688615 .             # world record
+  
+  ?competition wdt:P641 ?sport .
+  
+  OPTIONAL { ?competition wdt:P585 ?date . }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+}
+ORDER BY 
+  ?sportLabel 
+  ?date
